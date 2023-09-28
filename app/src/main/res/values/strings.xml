@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">小游戏商店</string>
+    <string name="demo_info_text">Warning: \n\nFor demonstration purpose, the assembling and signing of the request parameters are done on the client side.\nHowever, in practice, both assembling and signing MUST BE carried out on the server side.</string>
+    <string name="pay_with_alipay">Pay with Alipay</string>
+    <string name="pay_with_alipay_hk">Pay with AlipayHK</string>
+    <string name="auth_with_alipay">Authenticate with Alipay</string>
+    <string name="web_to_native">Call Alipay from Web Content</string>
+    <string name="check_sdk_version">Alipay SDK Version</string>
+    <string name="pay_success">Payment success:</string>
+    <string name="auth_failed">Authentication failed:</string>
+    <string name="error_missing_appid_rsa_private">Error: Missing \"APPID\" or \"RSA_PRIVATE\" in PayDemoActivity.</string>
+    <string name="error_missing_hk_partner_seller_rsa_private">Error: Missing \"PARTNER\", \"SELLER\", or \"RSA_PRIVATE\\ in OrderUtils1_0_HK.</string>
+    <string name="pay_result">Payment result:</string>
+    <string name="error_auth_missing_partner_appid_rsa_private_target_id">Error: Missing \"PARTNER\", \"APP_ID\", \"RSA_PRIVATE\", or \"TARGET_ID\" in PayDemoActivity.</string>
+    <string name="confirm">Confirm</string>
+    <string name="pay_failed">Payment failed:</string>
+    <string name="auth_success">Authentication success:</string>
+    <string name="alipay_sdk_version_is">"Alipay SDK version: "</string>
+    <string name="error_missing_h5_pay_url">Missing URL to load. Please configure in PayDemoActivity.h5Pay()</string>
+    <string name="error">Error</string>
+    <string name="pay_cross_border">Cross-border Pay with Alipay</string>
+    <string name="error_missing_global_partner_seller_rsa_private">Error: Missing \"PARTNER\", \"SELLER\", or \"RSA_PRIVATE\\ in OrderUtils1_0_Global.</string>
+    <string name="payment_inst_hk">Payer: HK</string>
+    <string name="payment_inst_cn">Payer: CN</string>
+    <string name="ooxx_desc">\t\t\t\t网格中的不同地方放置了一些X和O。游戏的目的是将X和O填充到剩余的方格内:\n\t\t\t\t1.每一行以及每一列中没有超过俩个连续的X或O。\n\t\t\t\t2.每一行以及每一列中的X和O数量相同。\n\t\t\t\t3.每一行以及每一列都是唯一的。</string>
+    <string name="elsfk">\t\t\t\t1.移动、旋转和摆放游戏自动输出的各种方块，使之排列成完整的一行或多行并且消除得分。\n\t\t\t\t2.玩家可以做的操作有：以90度为单位旋转方块，以格子为单位左右移动方块，让方块加速落下。\n\t\t\t\t3.方块移到区域最下方或是着地到其他方块上无法移动时，就会固定在该处，而新的方块出现在区域上方开始落下。</string>
+
+
+</resources>

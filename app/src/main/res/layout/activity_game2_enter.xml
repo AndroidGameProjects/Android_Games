@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Game2.Game2_Enter"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_gameBack2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="返回"
+        android:background="#00000000"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <com.example.ex42.util.LunBo.MyViewPager
+            android:id="@+id/looper_pager2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+
+        <LinearLayout
+            android:id="@+id/points_container2"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="40px"
+            android:gravity="center"
+            android:orientation="horizontal"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="78dp">
+
+        <TextView
+            android:id="@+id/et_ELSFKid2"
+            style="@style/CustomTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="78dp"
+            android:text="俄罗斯方块"
+            android:textSize="60dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/et_elsfk_whetherBuy2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="(未购买)"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/elsfk"
+        android:textSize="20dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:onClick="Pay2"
+            android:id="@+id/btn_bottom_begin2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开始游玩"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/rounded_button" />
+
+    </RelativeLayout>
+
+</LinearLayout>

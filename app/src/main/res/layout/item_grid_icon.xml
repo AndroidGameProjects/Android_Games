@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="38dp"
+    android:layout_height="38dp"
+    android:padding="0dp">
+
+    <ImageView
+        android:id="@+id/item_img"
+        android:gravity="center"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_centerInParent="true"
+        android:background="@color/white"
+        android:tag="itemImage_null"
+        android:contentDescription="Item Image">
+    </ImageView>
+
+</RelativeLayout>

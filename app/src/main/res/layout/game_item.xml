@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="160dp"
+            android:layout_height="140dp"
+            android:src="@drawable/ooxx"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   小游戏商店"
+            android:textSize="30dp"
+            style="@style/CustomTextViewStyle"
+            android:layout_toRightOf="@id/imageView"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+</LinearLayout>

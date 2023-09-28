@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="images">
+        <item>@drawable/itemimage_null</item>
+        <item>@drawable/itemimage_x</item>
+        <item>@drawable/itemimage_o</item>
+    </string-array>
+
+    <string-array name="gameName">
+        <item>XXOO</item>
+    </string-array>
+
+    <string-array name="gameName2">
+        <item>俄罗斯方块</item>
+    </string-array>
+
+    <string-array name="gameInfo">
+        <item>网格中的不同地方放置了一些X和O。游戏的目的是将X和O填充到剩余的方格内:
+            每一行以及每一列中没有超过俩个连续的X或O。
+            每一行以及每一列中的X和O数量相同。
+            每一行以及每一列都是唯一的。</item>
+    </string-array>
+
+    <string-array name="gameInfo2">
+        <item>移动、旋转和摆放游戏自动输出的各种方块，使之排列成完整的一行或多行并且消除得分。</item>
+    </string-array>
+
+    <string-array name="gameList_Image">
+        <item>@drawable/ooxx</item>
+    </string-array>
+
+    <string-array name="gameList_Image2">
+        <item>@drawable/fk</item>
+    </string-array>
+
+</resources>

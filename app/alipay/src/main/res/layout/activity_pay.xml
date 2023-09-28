@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PayActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/order_info_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="黄焖鸡米饭"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/pay_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="金额:18元"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/pay_password_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入支付密码"
+        android:inputType="numberPassword"/>
+
+    <Button
+        android:id="@+id/pay_commit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="确认支付"/>
+
+</LinearLayout>

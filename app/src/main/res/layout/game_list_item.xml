@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="180dp"
+    android:layout_width="match_parent">
+
+    <ImageView
+        android:id="@+id/ListItem_Image"
+        android:layout_height="180dp"
+        android:layout_width="180dp"/>
+
+    <TextView
+        android:id="@+id/ListItem_Info"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_alignBottom="@id/ListItem_Image"
+        android:layout_toRightOf="@+id/ListItem_Image"/>
+
+    <TextView
+        android:id="@+id/ListItem_GameName"
+        android:layout_above="@+id/ListItem_Info"
+        android:layout_alignLeft="@+id/ListItem_Info"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+    <Button
+        android:id="@+id/ListItem_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="9dp"
+        android:background="@color/white"
+        android:text="已购买" />
+
+</RelativeLayout>

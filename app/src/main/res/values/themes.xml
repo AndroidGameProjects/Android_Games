@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Ex42" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.Ex42" parent="Base.Theme.Ex42" />
+</resources>
