@@ -234,7 +234,7 @@ public class Game1_Enter extends AppCompatActivity implements MyViewPager.OnView
             });
         }
         et_ooxx_whetherBuy.setText("(已购买QvQ)");
-        btn_bottom_begin.setText("开始游戏");
+        btn_bottom_begin.setText("开始游玩");
     }
 
     private void initDBHelper() {
