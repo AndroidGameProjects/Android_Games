@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.example.ex42.database.ShoppingDBHelper;
 import com.example.ex42.database.enity.User;
 import com.example.ex42.util.GetString;
+import com.example.ex42.util.HideStateBar;
 import com.example.ex42.util.ToastUtil;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -32,8 +33,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        HideStateBar h1 = new HideStateBar();
+        h1.hideStatusBar(this);
         setContentView(R.layout.activity_forgot_password);
-        hideStatusBar(ForgotPasswordActivity.this);
         initView();
         initCode();
         initListener();
@@ -141,16 +143,4 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 //        mDBHelper.closeLink();
     }
 
-    public  void hideStatusBar(Activity activity) {
-        if (activity == null) return;
-        Window window = activity.getWindow();
-        if (window == null) return;
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        WindowManager.LayoutParams lp = window.getAttributes();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-        }
-        window.setAttributes(lp);
-    }
 }

@@ -16,7 +16,7 @@ import com.example.ex42.R;
 
 public class GameControl {
 
-
+    private boolean isStart = false;
     Handler handler;
 
     //地图模型
@@ -213,11 +213,21 @@ public class GameControl {
             boxsModel.move(0,1,mapsModel);
         } else if (id  == R.id.btnStart) {
             // 执行按钮开始
+            Message msg = new Message();
+            msg.obj = "StartMusic";
+            handler.sendMessage(msg);
+            isStart = true;
             startGame();
         } else if (id  == R.id.btnPause) {
             // 执行按钮暂停
+            Message msg = new Message();
+            msg.obj = "PauseMusic";
+            handler.sendMessage(msg);
             setPause(false);
         } else if(id == R.id.btnDown){
+            if (!isStart){
+                return;
+            }
             if (isPause){
                 return ;
             }

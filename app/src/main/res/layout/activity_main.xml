@@ -6,66 +6,135 @@
     android:background="@mipmap/xxww"
     android:orientation="vertical">
 
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/xxww">
+
+        <com.example.ex42.Batter.PowerConsumptionRankingsBatteryView
+            android:id="@+id/mPowerConsumptionRankingsBatteryView"
+            android:layout_width="21dp"
+            android:layout_height="33dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"/>
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="-1dp"
+        android:layout_marginBottom="98dp"
         android:orientation="vertical"
         android:padding="30dp">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_launcher"/>
+                android:layout_width="90dp"
+                android:layout_height="70dp"
+                android:src="@drawable/ic_android_black_24dp" />
 
             <TextView
                 android:id="@+id/textView"
+                style="@style/CustomTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="   小游戏商店"
-                android:textSize="40dp"
-                style="@style/CustomTextViewStyle"
+                android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/imageView"
-                android:layout_centerVertical="true"/>
+                android:text="   小游戏商店"
+                android:textSize="40dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="50dp">
+
+            <ImageView
+                android:layout_width="47dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/baseline_person_24" />
+
+            <EditText
+                android:id="@+id/et_Main_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="48dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginBottom="4dp"
+                android:hint="初次登录请注册"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="50dp">
+
+            <ImageView
+                android:layout_width="47dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/baseline_lock_open_24" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="48dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginBottom="4dp"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+
+            <ToggleButton
+                android:id="@+id/showPasswordToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="6dp"
+                android:background="@color/transparent"
+                android:drawableStart="@drawable/can_look"
+                android:textOff=""
+                android:textOn="" />
 
         </RelativeLayout>
 
 
-        <EditText
-            android:id="@+id/et_Main_account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="QQ号码/手机号码/邮箱"
-            android:layout_marginTop="30dp"/>
-
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="密码"/>
-
         <Button
             android:id="@+id/btn_login"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="登录"
-            android:textSize="20sp"
+            android:layout_marginTop="60dp"
             android:background="@drawable/rounded_button"
-            />
+            android:text="登录"
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            >
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:id="@+id/tv_forgetPassword"
@@ -73,31 +142,26 @@
                 android:layout_height="wrap_content"
                 android:text="忘记密码"
                 android:textColor="#0073FF"
-                android:textSize="16sp"
-                />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_NewUserRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="新用户注册"
                 android:layout_alignParentRight="true"
+                android:text="新用户注册"
                 android:textColor="#0073FF"
-                android:textSize="16sp"
-                />
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
             android:id="@+id/captcha_image_view"
-            />
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
 
 
     </LinearLayout>
-
-
 
     <TextView
         android:layout_width="wrap_content"

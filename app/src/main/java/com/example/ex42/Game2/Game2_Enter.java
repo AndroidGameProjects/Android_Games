@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.EnvUtils;
 import com.alipay.sdk.app.PayTask;
 import com.example.ex42.Game1.Game1_Enter;
 import com.example.ex42.Game1.GameMain.Game;
@@ -27,6 +28,7 @@ import com.example.ex42.Pay.demo.AuthResult;
 import com.example.ex42.Pay.demo.PayResult;
 import com.example.ex42.Pay.demo.PayUtil.OrderInfoUtil2_0;
 import com.example.ex42.database.ShoppingDBHelper;
+import com.example.ex42.util.HideStateBar;
 import com.example.ex42.util.LunBo.LooperPagerAdapter;
 import com.example.ex42.util.LunBo.MyViewPager;
 import com.example.ex42.R;
@@ -64,7 +66,10 @@ public class Game2_Enter extends AppCompatActivity implements MyViewPager.OnView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
         super.onCreate(savedInstanceState);
+        HideStateBar h1 = new HideStateBar();
+        h1.hideStatusBar(this);
         setContentView(R.layout.activity_game2_enter);
         mUser = (User) getIntent().getSerializableExtra("user");
         Log.d("game2_test", mUser.toString());

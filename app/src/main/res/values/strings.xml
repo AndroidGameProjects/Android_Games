@@ -27,4 +27,5 @@
     <string name="elsfk">\t\t\t\t1.移动、旋转和摆放游戏自动输出的各种方块，使之排列成完整的一行或多行并且消除得分。\n\t\t\t\t2.玩家可以做的操作有：以90度为单位旋转方块，以格子为单位左右移动方块，让方块加速落下。\n\t\t\t\t3.方块移到区域最下方或是着地到其他方块上无法移动时，就会固定在该处，而新的方块出现在区域上方开始落下。</string>
 
 
+    <string name="ouyangpeng">欧阳鹏 https://blog.csdn.net/ouyang_peng/</string>
 </resources>

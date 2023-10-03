@@ -17,7 +17,7 @@ public class Game {
         this.desc = desc;
     }
     private static int[] iconArray = {R.drawable.ooxx, R.drawable.fk};
-    private static String[] nameArray = {"xxoo", "俄罗斯方块"};
+    private static String[] nameArray = {"OOXX", "俄罗斯方块"};
     private static String[] descArray = {
             "网格中的不同地方放置了一些X和O。游戏的目的是将X和O填充到剩余的方格内:\n" +
                     "            每一行以及每一列中没有超过俩个连续的X或O。\n" +

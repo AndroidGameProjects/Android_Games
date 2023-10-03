@@ -3,18 +3,53 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/Game_Time"
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+        <Button
+            android:id="@+id/Game_Quit_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回"
+            android:background="#00000000"/>
+
+
+        <com.example.ex42.Batter.PowerConsumptionRankingsBatteryView
+            android:id="@+id/mPowerConsumptionRankingsBatteryView"
+            android:layout_width="21dp"
+            android:layout_height="33dp"
+            android:layout_gravity="end"
+            android:layout_marginLeft="290dp"/>
+    </LinearLayout>
+
+
+
+
+    <Chronometer
+        android:id="@+id/chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="00:00:00"
-        android:textSize="30dp"></TextView>
+        android:textSize="30sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="5dp" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/Game_Time"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="00:00:00"-->
+<!--        android:textSize="30dp"-->
+<!--        android:textColor="@color/red"/>-->
 
     <RelativeLayout
+        android:layout_marginTop="20dp"
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:clipChildren="false"
@@ -230,11 +265,62 @@
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/Game_Quit_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="返回菜单"
-        android:textSize="17dp"></Button>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="130dp"
+            android:layout_marginTop="60dp"
+            android:text="未开始游戏"
+            android:textSize="30dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/red" />
+
+        <TextView
+            android:id="@+id/Tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请点击开始游戏以计时"
+            android:textSize="15dp"
+            android:textColor="@color/purple_200"
+            android:layout_above="@id/Begin_Game"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="110dp"
+            android:text="开始"
+            android:background="@drawable/rounded_button" />
+
+        <Button
+            android:id="@+id/pause_button"
+            android:layout_marginLeft="220dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂停"
+            android:background="@drawable/rounded_button" />
+
+        <Button
+            android:id="@+id/Begin_Game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textSize="17dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="0dp"
+            android:background="@color/transparent" />
+
+    </RelativeLayout>
+
+
+
 </LinearLayout>

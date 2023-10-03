@@ -14,4 +14,9 @@
     <color name="transparent">#00000000</color>
     <color name="orange">#ffffdd</color>
     <color name="red">#ff0000</color>
+
+
+    <color name="lowerPowerColor">#ff4d4d</color>
+    <color name="onlineColor">#00d68d</color>
+    <color name="offlineColor">#bfbfbf</color>
 </resources>

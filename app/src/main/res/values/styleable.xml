@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name = "MyBatteryView">
+        <attr name = "mCapWidth" format = "dimension" />
+        <attr name = "batteryTextSize" format = "dimension" />
+        <attr name = "batteryColor" format = "color" />
+        <attr name = "powerColor" format = "color" />
+        <attr name = "lowPowerColor" format = "color" />
+        <attr name = "showText" format = "boolean" />
+    </declare-styleable>
+</resources>

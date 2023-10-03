@@ -1,9 +1,18 @@
 package com.example.ex42.Game2.GameMain;
 
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Canvas;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -13,10 +22,52 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ex42.Batter.BaseHandlerCallBack;
+import com.example.ex42.Batter.PowerConsumptionRankingsBatteryView;
+import com.example.ex42.Batter.Test;
 import com.example.ex42.Game2.GameMain.control.GameControl;
 import com.example.ex42.R;
+import com.example.ex42.Service.MusicService;
+import com.example.ex42.util.HideStateBar;
 
-public class ElfkfMainActivity extends AppCompatActivity implements View.OnClickListener {
+import java.lang.ref.WeakReference;
+
+public class ElfkfMainActivity extends AppCompatActivity implements View.OnClickListener,BaseHandlerCallBack {
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private PowerConsumptionRankingsBatteryView mPowerConsumptionRankingsBatteryView;
+    private int power;
+
+    private NoLeakHandler mHandler;
+    private BroadcastReceiver mBatteryLevelReceiver;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    private MusicService musicService;
+    private boolean isBound = false;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+            musicService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    private Button btnPause;
+    private Button Game_Quit_Button;
 
     //view层没有数据没有变量
     //游戏区域控件
@@ -69,6 +120,16 @@ public class ElfkfMainActivity extends AppCompatActivity implements View.OnClick
                     //关闭辅助线
                     ((Button)findViewById(R.id.btnGuideLines)).setText("辅助线-开");
                 }
+            } else if (type.equals("StartMusic")) {
+                if (isBound) {
+                    musicService.play();
+                }
+            }else if (type.equals("PauseMusic")) {
+                if (isBound && btnPause.getText().toString().equals("暂停")) {
+                    musicService.pause();
+                } else if (isBound && btnPause.getText().toString().equals("继续")) {
+                    musicService.play();
+                }
             }
         };
     };
@@ -77,7 +138,33 @@ public class ElfkfMainActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
+        HideStateBar h1 = new HideStateBar();
+        h1.hideStatusBar(this);
         setContentView(R.layout.activity_elsfk);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        mHandler = new NoLeakHandler(this);
+        mPowerConsumptionRankingsBatteryView = (PowerConsumptionRankingsBatteryView) findViewById(R.id.mPowerConsumptionRankingsBatteryView);
+
+        mBatteryLevelReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                mPowerConsumptionRankingsBatteryView.setLevelHeight(batteryLevel);
+                if (batteryLevel < 30) {
+                    mPowerConsumptionRankingsBatteryView.setLowerPower();
+                } else if (batteryLevel < 60) {
+                    mPowerConsumptionRankingsBatteryView.setOffline();
+                } else {
+                    mPowerConsumptionRankingsBatteryView.setOnline();
+                }
+            }
+        };
+
+        IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(mBatteryLevelReceiver, batteryLevelFilter);
+
+        mHandler.sendEmptyMessage(0);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //实例化游戏控制器
         gameControl = new GameControl(handler,this);
@@ -103,11 +190,18 @@ public class ElfkfMainActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.btnPause).setOnClickListener(this);
         findViewById(R.id.btnDown).setOnClickListener(this);
         findViewById(R.id.btnGuideLines).setOnClickListener(this);
+        Game_Quit_Button = findViewById(R.id.Game_Quit_Button);
+        Game_Quit_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     //初始化视图
     public void initView() {
-
+        btnPause = findViewById(R.id.btnPause);
         // 在初始化视图时，显示最高分数
         TextView textHighScore = findViewById(R.id.textMaxScore);
         textHighScore.setText(gameControl.getHighScore(this) + "");
@@ -173,4 +267,54 @@ public class ElfkfMainActivity extends AppCompatActivity implements View.OnClick
         nextPanel.invalidate();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+        unregisterReceiver(mBatteryLevelReceiver);
+    }
+
+    @Override
+    public void callBack(Message msg) {
+        switch (msg.what) {
+            case 0:
+                mHandler.sendEmptyMessageDelayed(0, 1000); // update every second
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static class NoLeakHandler<T extends BaseHandlerCallBack> extends Handler {
+        private WeakReference<T> wr;
+
+        public NoLeakHandler(T t) {
+            wr = new WeakReference<>(t);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            T t = wr.get();
+            if (t != null) {
+                t.callBack(msg);
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, MusicService.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+    }
 }

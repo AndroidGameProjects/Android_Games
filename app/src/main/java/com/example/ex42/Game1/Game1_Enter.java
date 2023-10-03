@@ -8,13 +8,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,11 +26,14 @@ import com.alipay.sdk.app.EnvUtils;
 import com.alipay.sdk.app.PayTask;
 import com.example.ex42.ForgotPasswordActivity;
 import com.example.ex42.Game1.GameMain.Game;
+import com.example.ex42.Game2.Game2_Enter;
+import com.example.ex42.Game2.GameMain.ElfkfMainActivity;
 import com.example.ex42.Pay.demo.AuthResult;
 import com.example.ex42.Pay.demo.PayDemoActivity;
 import com.example.ex42.Pay.demo.PayResult;
 import com.example.ex42.Pay.demo.PayUtil.OrderInfoUtil2_0;
 import com.example.ex42.database.ShoppingDBHelper;
+import com.example.ex42.util.HideStateBar;
 import com.example.ex42.util.LunBo.LooperPagerAdapter;
 import com.example.ex42.util.LunBo.MyViewPager;
 import com.example.ex42.R;
@@ -66,6 +73,8 @@ public class Game1_Enter extends AppCompatActivity implements MyViewPager.OnView
     protected void onCreate(Bundle savedInstanceState) {
         EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
         super.onCreate(savedInstanceState);
+        HideStateBar h1 = new HideStateBar();
+        h1.hideStatusBar(this);
         setContentView(R.layout.activity_game1_enter);
         mUser = (User) getIntent().getSerializableExtra("user");
         game1Str = mUser.game1;
@@ -123,13 +132,18 @@ public class Game1_Enter extends AppCompatActivity implements MyViewPager.OnView
         btn_bottom_begin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String buttonText = btn_bottom_begin.getText().toString();
-                if (buttonText.equals("请购买")) {
-                    Pay(v);
-                } else if (buttonText.equals("开始游玩")){
-                    Intent intent = new Intent(Game1_Enter.this, Game.class);
-                    startActivity(intent);
-                }
+                btn_bottom_begin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String buttonText = btn_bottom_begin.getText().toString();
+                        if (buttonText.equals("请购买")) {
+                            Pay(v);
+                        } else if (buttonText.equals("开始游玩")){
+                            Intent intent = new Intent(Game1_Enter.this, Game.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
             }
         });
     }
@@ -138,7 +152,6 @@ public class Game1_Enter extends AppCompatActivity implements MyViewPager.OnView
         if (TextUtils.isEmpty(APPID) || (TextUtils.isEmpty(RSA2_PRIVATE) && TextUtils.isEmpty(RSA_PRIVATE))) {
             return;
         }
-
         /*
          * 这里只是为了方便直接向商户展示支付宝的整个支付流程；所以Demo中加签过程直接放在客户端完成；
          * 真实App里，privateKey等数据严禁放在客户端，加签过程务必要放在服务端完成；
@@ -235,7 +248,7 @@ public class Game1_Enter extends AppCompatActivity implements MyViewPager.OnView
             });
         }
         et_ooxx_whetherBuy.setText("(已购买QvQ)");
-        btn_bottom_begin.setText("开始游戏");
+        btn_bottom_begin.setText("开始游玩");
     }
 
     private void initDBHelper() {
@@ -317,5 +330,7 @@ public class Game1_Enter extends AppCompatActivity implements MyViewPager.OnView
     public void onPageScrollStateChanged(int state) {
 
     }
+
+
 
 }

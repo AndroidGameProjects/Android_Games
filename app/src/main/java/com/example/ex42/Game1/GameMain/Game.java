@@ -1,23 +1,38 @@
 package com.example.ex42.Game1.GameMain;
 
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.TypedArray;
+import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ex42.Batter.BaseHandlerCallBack;
+import com.example.ex42.Batter.PowerConsumptionRankingsBatteryView;
 import com.example.ex42.R;
+import com.example.ex42.Service.MusicService;
+import com.example.ex42.util.HideStateBar;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,15 +57,62 @@ class NumItem{
     }
 }
 
-public class Game extends AppCompatActivity {
+public class Game extends AppCompatActivity implements BaseHandlerCallBack{
+
+    private boolean start = false;
+    private static String TAG = "Game";
+    private String timeStr;
+    private Chronometer chronometer;
     public static Game instance;
     private GridView game_GridButton;
-
+    private TextView tv_pause ;
+    private Button btn_pause;
     private List<NumItem> rowNum = new ArrayList<>();
     private List<NumItem> columnNum = new ArrayList<>();
     private List<Icon> iconList = new ArrayList<>();
     private OriginState originState = new OriginState();
+    private boolean isGameWon = false;
+    private long pauseOffset = 0;
+    private boolean running = false;
+    private long baseTime = 0;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private PowerConsumptionRankingsBatteryView mPowerConsumptionRankingsBatteryView;
+    private int power;
 
+    private NoLeakHandler mHandler;
+    private BroadcastReceiver mBatteryLevelReceiver;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private MusicService musicService;
+    private boolean isBound = false;
+
+    private ServiceConnection MusicServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+            musicService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
+    private Button mStartButton;
+    private Button mPauseButton;
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(MusicServiceConnection);
+            isBound = false;
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //废案
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -63,25 +125,51 @@ public class Game extends AppCompatActivity {
         }
     };
 
+    private Button mBegin_game;
+    private TextView mGame_time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        HideStateBar h1 = new HideStateBar();
+        h1.hideStatusBar(this);
         setContentView(R.layout.activity_game);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        mHandler = new NoLeakHandler(this);
+        mPowerConsumptionRankingsBatteryView = (PowerConsumptionRankingsBatteryView) findViewById(R.id.mPowerConsumptionRankingsBatteryView);
 
-        instance = this;
+        mBatteryLevelReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                mPowerConsumptionRankingsBatteryView.setLevelHeight(batteryLevel);
+                if (batteryLevel < 30) {
+                    mPowerConsumptionRankingsBatteryView.setLowerPower();
+                } else if (batteryLevel < 60) {
+                    mPowerConsumptionRankingsBatteryView.setOffline();
+                } else {
+                    mPowerConsumptionRankingsBatteryView.setOnline();
+                }
+            }
+        };
 
-        Intent intent = new Intent(Game.this, Clock.class);
-        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
-        startService(intent);
+        IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(mBatteryLevelReceiver, batteryLevelFilter);
 
+        mHandler.sendEmptyMessage(0);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Button quitButton = findViewById(R.id.Game_Quit_Button);
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isBound) {
+                    musicService.stop();
+                }
                 Game.this.finish();
             }
         });
-
+        tv_pause = findViewById(R.id.tv_pause);
         InitData();
 
         IconAdapter iconAdapter = new IconAdapter(this, R.layout.item_grid_icon, iconList);
@@ -99,18 +187,30 @@ public class Game extends AppCompatActivity {
                     ImageView imageView = view.findViewById(R.id.item_img);
                     switch ((String)imageView.getTag()){
                         case "itemImage_null":
+                            if (start == false){
+                                start = true;
+                                mStartButton.performClick();
+                            }
                             imageView.setImageResource(R.drawable.itemimage_x);
                             icon.SetIconId(1);
                             imageView.setTag("itemImage_x");
                             UpdateUI(i, 0);
                             break;
                         case "itemImage_x":
+                            if (start == false){
+                                start = true;
+                                mStartButton.performClick();
+                            }
                             imageView.setImageResource(R.drawable.itemimage_o);
                             imageView.setTag("itemImage_o");
                             icon.SetIconId(2);
                             UpdateUI(i, 1);
                             break;
                         case "itemImage_o":
+                            if (start == false){
+                                start = true;
+                                mStartButton.performClick();
+                            }
                             imageView.setImageResource(R.drawable.itemimage_null);
                             imageView.setTag("itemImage_null");
                             icon.SetIconId(0);
@@ -120,18 +220,153 @@ public class Game extends AppCompatActivity {
                 }
 
                 //TODO:将数据传进 IsWin() 函数
-                boolean isWin = IsWin(i);
-
+//                boolean isWin = IsWin(i);
+                boolean isWin = true;
                 if(isWin){
-                    unbindService(serviceConnection);
-                    stopService(new Intent(Game.this, Clock.class));
-                    Intent intent = new Intent(Game.this, End.class);
-                    startActivity(intent);
-                    Game.this.finish();
+                    mPauseButton.performClick();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
+                    builder.setMessage("恭喜，你通关了，成绩以记录排行榜，即将关闭此页面")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Game.this.finish();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+//                    unbindService(serviceConnection);
+//                    stopService(new Intent(Game.this, Clock.class));
+//                    Intent intent = new Intent(Game.this, End.class);
+//                    startActivity(intent);
+//                    Game.this.finish();
+                    Chronometer chronometer = findViewById(R.id.chronometer);
+                    long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+                    int hours = (int) (elapsedMillis / 3600000);
+                    int minutes = (int) (elapsedMillis - hours * 3600000) / 60000;
+                    int seconds = (int) (elapsedMillis - hours * 3600000 - minutes * 60000) / 1000;
+                    String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                    Log.d(TAG, time);
                 }
                 else Log.d("Game", "请继续解开谜题！");
             }
         });
+        initChoronometer();
+//        initBegan();
+//        // 注册广播接收器
+//        IntentFilter filter = new IntentFilter("com.example.ex42");
+//        registerReceiver(mTimerReceiver, filter);
+//        initPause();
+    }
+
+    private void initChoronometer() {
+        chronometer = findViewById(R.id.chronometer);
+        chronometer.setFormat("计时：%s");
+
+        mStartButton = findViewById(R.id.start_button);
+        mStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isBound) {
+                    musicService.play();
+                }
+                if (!running) {
+                    chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset + baseTime);
+                    chronometer.start();
+                    running = true;
+                    JgRunning();
+                }
+            }
+        });
+
+        mPauseButton = findViewById(R.id.pause_button);
+        mPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isBound) {
+                    musicService.pause();
+                }
+                if (running) {
+                    chronometer.stop();
+                    pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+                    running = false;
+                    JgRunning();
+                }
+            }
+        });
+
+//        Button resetButton = findViewById(R.id.reset_button);
+//        resetButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                chronometer.stop();
+//                chronometer.setBase(SystemClock.elapsedRealtime());
+//                pauseOffset = 0;
+//                running = false;
+//                baseTime = 0;
+//            }
+//        });
+    }
+
+//    private void initPause() {
+//        btn_pause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btn_pause.getText().toString().equals("暂停")){
+//                    Intent intent = new Intent(Game.this, TimeService.class);
+//                    stopService(intent);
+//                    btn_pause.setText("开始");
+//                    tv_pause.setText("暂停中");
+//                } else if (btn_pause.getText().toString().equals("开始")) {
+//                    String time = mGame_time.getText().toString();
+//                    Intent intent = new Intent(Game.this, TimeService.class);
+//                    intent.putExtra("time","01:30:00");
+//                    Log.d("test", time);
+//                    startService(intent);
+//                    btn_pause.setText("暂停");
+//                    tv_pause.setText("游戏中");
+//                }
+//            }
+//        });
+//    }
+//
+//    private void initBegan() {
+//        mGame_time = findViewById(R.id.Game_Time);
+//        mBegin_game = findViewById(R.id.Begin_Game);
+//        mBegin_game.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // 启动服务
+//                Intent intent = new Intent(Game.this, TimeService.class);
+//                startService(intent);
+//                tv_pause.setText("游戏中");
+//            }
+//        });
+//    }
+//    //广播接收者，接收时间服务
+//    private BroadcastReceiver mTimerReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String time = intent.getStringExtra("time");
+//            mGame_time.setText(time);
+//        }
+//    };
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, MusicService.class);
+        bindService(intent, MusicServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 注销广播接收器
+//        unregisterReceiver(mTimerReceiver);
+        mHandler.removeCallbacksAndMessages(null);
+        unregisterReceiver(mBatteryLevelReceiver);
     }
 
     public void InitData(){
@@ -183,93 +418,6 @@ public class Game extends AppCompatActivity {
 
     public boolean IsWin(int position){
 //        //TODO:判断是否胜利
-//        Log.d("GridView", "判断是否胜利");
-//
-//        Icon frontIcon, behindIcon = null;
-//        Icon icon = iconList.get(position);
-//
-//        //判断水平方向
-//        if(position % 8 != 0 && position % 8 != 7){
-//            frontIcon = iconList.get(position - 1);
-//            behindIcon = iconList.get(position + 1);
-//
-//            int iconId = icon.GetIconId();
-//            int frontId = frontIcon.GetIconId();
-//            int behindId = behindIcon.GetIconId();
-//
-//            if(frontId != 0 && behindId != 0 && iconId != 0){
-//                if(iconId == frontId && iconId != behindId || iconId != frontId && iconId == behindId){
-//                    icon.SetIsRight(true);
-//                    SetChildRight(position - 1);
-//                    SetChildRight(position + 1);
-//                }
-//                else icon.SetIsRight(false);
-//            }
-//            else{
-//                icon.SetIsRight(false);
-//            }
-//        }
-//        else if(icon.GetIconId() != 0){
-//            icon.SetIsRight(true);
-//            if(position % 8 == 0){
-//                SetChildRight(position + 1);
-//            }
-//            else if(position % 8 == 7){
-//                SetChildRight(position - 1);
-//            }
-//        }
-//        else icon.SetIsRight(false);
-//
-//        //判断竖直方向
-//        if(position > 7 && position < 56){
-//            frontIcon = iconList.get(position - 8);
-//            behindIcon = iconList.get(position + 8);
-//
-//            int iconId = icon.GetIconId();
-//            int frontId = frontIcon.GetIconId();
-//            int behindId = behindIcon.GetIconId();
-//
-//            if(frontId != 0 && behindId != 0 && iconId != 0){
-//                if(iconId == frontId && iconId != behindId || iconId != frontId && iconId == behindId){
-//                    icon.SetIsRight(true);
-//                    SetChildRight(position - 8);
-//                    SetChildRight(position + 8);
-//                }
-//                else icon.SetIsRight(false);
-//            }
-//            else{
-//                icon.SetIsRight(false);
-//            }
-//        }
-//        else if(icon.GetIconId() != 0){
-//            icon.SetIsRight(true);
-//            if(position <= 7){
-//                SetChildRight(position + 8);
-//            }
-//            else if(position >= 56){
-//                SetChildRight(position - 8);
-//            }
-//        }
-//        else icon.SetIsRight(false);
-//
-//        for(int i = 0; i < 8; i++){
-//            int num_x = 0, num_o = 0;
-//            for(int j = 0; j < 8; j++){
-//                int tmp = i * 8 + j;
-//                Icon tmpIcon = iconList.get(tmp);
-//
-//                //有不对的立刻返回 false
-//                if(!tmpIcon.GetIsRight()) return false;
-//
-//                if(tmpIcon.GetIconId() == 1){
-//                    num_x += 1;
-//                }
-//                else if(tmpIcon.GetIconId() == 2){
-//                    num_o += 1;
-//                }
-//            }
-//            if(num_o != num_x) return false;
-//        }
         int point = 0;
         int[][] answer = originState.GetAnswer();
 
@@ -413,8 +561,45 @@ public class Game extends AppCompatActivity {
         textView.setText(text);
     }
 
-    public void SetTimeView(Intent intent){
-        TextView textView = findViewById(R.id.Game_Time);
-        textView.setText(String.valueOf(intent.getIntExtra("time", 0)));
+    public void JgRunning(){
+        if (running == true){
+            tv_pause.setText("游戏中");
+        } else if (running == false) {
+            tv_pause.setText("暂停中");
+        }
     }
+
+    public void SetTimeView(Intent intent){
+//        TextView textView = findViewById(R.id.Game_Time);
+//        textView.setText(String.valueOf(intent.getIntExtra("time", 0)));
+    }
+
+    @Override
+    public void callBack(Message msg) {
+        switch (msg.what) {
+            case 0:
+                mHandler.sendEmptyMessageDelayed(0, 1000); // update every second
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static class NoLeakHandler<T extends BaseHandlerCallBack> extends Handler {
+        private WeakReference<T> wr;
+
+        public NoLeakHandler(T t) {
+            wr = new WeakReference<>(t);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            T t = wr.get();
+            if (t != null) {
+                t.callBack(msg);
+            }
+        }
+    }
+
 }
