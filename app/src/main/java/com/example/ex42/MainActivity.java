@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.ex42.Batter.BaseBatteryActivity;
+import com.example.ex42.OverWrite.ListViewActivity;
 import com.example.ex42.Pay.demo.Game.GameMainActivity;
 import com.example.ex42.database.ShoppingDBHelper;
 import com.example.ex42.database.enity.User;
@@ -112,21 +113,30 @@ public class MainActivity extends AppCompatActivity  {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                User user = mDBHelper.queryByAccount(et_Main_account.getText().toString());//查出的用户
+                //查出的用户
+                User user = mDBHelper.queryByAccount(et_Main_account.getText().toString());
+
+                //判断是否存在用户
                 if (user == null){
+                    //用户不存在则抛出异常
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             ToastUtil.show(MainActivity.this,"不存在该用户");
                         }
                     });
-                }else {
+                }
+                else {
+                    //用户存在，则继续判断密码是否正确
                     String InputPassword = et_password.getText().toString();
+
                     if (InputPassword.equals(user.password)){
-                        Intent intent = new Intent(MainActivity.this, GameMainActivity.class);
+                        //密码正确跳转至下一界面
+                        Intent intent = new Intent(MainActivity.this, ListViewActivity.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
                     }else {
+                        //密码不正确则抛出异常
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
