@@ -12,6 +12,8 @@ public class OriginState {
     private List<int[][]> answerList = new ArrayList<>();
 
     public OriginState(){
+
+
         int[][] array1 = {
                 {0,0,0,1,0,1,0,0},
                 {0,1,0,0,0,0,0,0},
@@ -32,9 +34,31 @@ public class OriginState {
                 {1,1,2,1,2,1,2,2},
                 {1,1,2,2,1,2,2,1}};
 
+        int[][] array2 = {
+                {0,2,1,0,1,0,1,0},
+                {1,0,0,2,0,0,1,0},
+                {0,0,0,0,0,0,0,0},
+                {0,1,0,0,2,2,0,0},
+                {0,2,0,0,0,0,0,1},
+                {2,0,0,0,0,1,0,0},
+                {0,0,1,0,0,0,0,1},
+                {2,0,0,0,0,0,0,0}};
+
+        int[][] answer2 = {
+                {1,2,1,2,1,2,1,2},
+                {1,1,2,2,1,2,1,2},
+                {2,2,1,1,2,1,2,1},
+                {1,1,2,1,2,2,1,2},
+                {2,2,1,2,1,1,2,1},
+                {2,1,2,1,2,1,1,2},
+                {1,2,1,2,1,2,2,1},
+                {2,1,2,1,2,1,2,1}};
+
         stateList.add(array1);
+        stateList.add(array2);
 
         answerList.add(answer1);
+        answerList.add(answer2);
     }
 
     private void AddArrayToList(int[][] array){

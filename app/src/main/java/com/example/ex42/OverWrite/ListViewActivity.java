@@ -125,7 +125,6 @@ public class ListViewActivity extends AppCompatActivity implements AdapterView.O
                 searchView.setQuery(string.toString(),true);
             }
         });
-
     }
 
     private void initDate() {

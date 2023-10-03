@@ -220,8 +220,8 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
                 }
 
                 //TODO:将数据传进 IsWin() 函数
-//                boolean isWin = IsWin(i);
-                boolean isWin = true;
+                boolean isWin = IsWin(i);
+//                boolean isWin = true;
                 if(isWin){
                     mPauseButton.performClick();
                     AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
