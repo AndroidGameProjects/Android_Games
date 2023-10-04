@@ -18,6 +18,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -327,7 +328,6 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
 
         lv_drawer_right.setAdapter(adapter);
         lv_drawer_right.setOnItemClickListener(new RightListListener());
-
     }
 
     // 定义一个右侧菜单列表的点击监听器
@@ -664,8 +664,10 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
     public void JgRunning(){
         if (running == true){
             tv_pause.setText("游戏中");
+            tv_pause.setGravity(Gravity.CENTER);
         } else if (running == false) {
             tv_pause.setText("暂停中");
+            tv_pause.setGravity(Gravity.CENTER);
         }
     }
 

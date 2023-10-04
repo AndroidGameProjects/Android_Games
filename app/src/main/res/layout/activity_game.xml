@@ -27,21 +27,13 @@
             android:layout_marginLeft="285dp"/>
     </LinearLayout>
 
-    <RelativeLayout
+    <Chronometer
+        android:id="@+id/chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="80dp">
-
-        <Chronometer
-            android:id="@+id/chronometer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:layout_marginLeft="65dp"/>
-    </RelativeLayout>
-
-
+        android:gravity="top|center"
+        android:textSize="30sp"
+        android:layout_marginTop="120dp"/>
 
 
 <!--    <TextView-->
@@ -61,8 +53,6 @@
         android:gravity="left"
         android:orientation="horizontal"
         android:padding="0dp">
-
-
 
         <TextView
             android:text="X/O"
@@ -270,59 +260,47 @@
 
         </TextView>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp">
-
-
-
-        <TextView
-            android:id="@+id/tv_pause"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="130dp"
-            android:layout_marginTop="550dp"
-            android:text="未开始游戏"
-            android:textSize="30dp"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/red" />
+            android:layout_below="@+id/Down_LinearLayout"
+            android:orientation="vertical"
+            android:gravity="center">
 
+            <TextView
+                android:id="@+id/tv_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
+                android:gravity="center"
+                android:text="未开始游戏"
+                android:textSize="30dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/red" />
 
-        <Button
-            android:id="@+id/start_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="600dp"
-            android:layout_marginLeft="110dp"
-            android:text="开始"
-            android:background="@drawable/rounded_button" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
-        <Button
-            android:id="@+id/pause_button"
-            android:layout_marginTop="600dp"
-            android:layout_marginLeft="220dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="暂停"
-            android:background="@drawable/rounded_button" />
+                <Button
+                    android:id="@+id/start_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <Button
-            android:id="@+id/Begin_Game"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text=""
-            android:textSize="17dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="0dp"
-            android:background="@color/transparent" />
+                    android:text="开始"
+                    android:background="@drawable/rounded_button" />
 
+                <Button
+                    android:id="@+id/pause_button"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="暂停"
+                    android:background="@drawable/rounded_button" />
+            </LinearLayout>
+
+        </LinearLayout>
     </RelativeLayout>
 
     <ListView
