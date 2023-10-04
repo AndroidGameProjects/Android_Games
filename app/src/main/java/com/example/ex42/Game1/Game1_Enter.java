@@ -140,6 +140,7 @@ public class Game1_Enter extends AppCompatActivity implements MyViewPager.OnView
                             Pay(v);
                         } else if (buttonText.equals("开始游玩")){
                             Intent intent = new Intent(Game1_Enter.this, Game.class);
+                            intent.putExtra("user", mUser);
                             startActivity(intent);
                         }
                     }

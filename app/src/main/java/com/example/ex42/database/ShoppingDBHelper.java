@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.ex42.database.enity.RankInfo;
 import com.example.ex42.database.enity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ShoppingDBHelper extends SQLiteOpenHelper {
@@ -19,6 +23,8 @@ public class ShoppingDBHelper extends SQLiteOpenHelper {
 
     // user信息表
     private static final String TABLE_USER_INFO = "users_info";
+    //game1信息表
+    private static final String TABLE_GAME1_RANKING = "game1_ranking";
 
     private ShoppingDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -72,6 +78,14 @@ public class ShoppingDBHelper extends SQLiteOpenHelper {
                 " game1 VARCHAR," +
                 " game2 VARCHAR);";
         db.execSQL(sql);
+
+        String sql2 = "CREATE TABLE IF NOT EXISTS " + TABLE_GAME1_RANKING +
+                " (_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                " account VARCHAR NOT NULL," +
+                " OverTime VARCHAR);";
+        db.execSQL(sql2);
+
+
     }
 
     @Override
@@ -101,6 +115,13 @@ public class ShoppingDBHelper extends SQLiteOpenHelper {
 //          return  1;
     }
 
+    public long insertRankInfo(RankInfo rankInfo){
+        ContentValues values = new ContentValues();
+        values.put("account",rankInfo.account);
+        values.put("OverTime",rankInfo.OverTime);
+        return mWDB.insert(TABLE_GAME1_RANKING,null,values);
+    }
+
     public User queryByAccount(String account){
         User user = null;
         String sql = "select * from" + TABLE_USER_INFO;
@@ -115,6 +136,20 @@ public class ShoppingDBHelper extends SQLiteOpenHelper {
             user.game2 = cursor.getString(5);
         }
         return user;
+    }
+
+    // 查询表中中所有的通关
+    public List<RankInfo> queryAllRankInfo() {
+        List<RankInfo> list = new ArrayList<>();
+        Cursor cursor = mRDB.query(TABLE_GAME1_RANKING, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            RankInfo rankInfo = new RankInfo();
+            rankInfo.id = cursor.getInt(0);
+            rankInfo.account = cursor.getString(1);
+            rankInfo.OverTime = cursor.getString(2);
+            list.add(rankInfo);
+        }
+        return list;
     }
 
     public long update(User user) {

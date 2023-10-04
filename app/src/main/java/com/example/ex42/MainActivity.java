@@ -113,30 +113,21 @@ public class MainActivity extends AppCompatActivity  {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //查出的用户
-                User user = mDBHelper.queryByAccount(et_Main_account.getText().toString());
-
-                //判断是否存在用户
+                User user = mDBHelper.queryByAccount(et_Main_account.getText().toString());//查出的用户
                 if (user == null){
-                    //用户不存在则抛出异常
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             ToastUtil.show(MainActivity.this,"不存在该用户");
                         }
                     });
-                }
-                else {
-                    //用户存在，则继续判断密码是否正确
+                }else {
                     String InputPassword = et_password.getText().toString();
-
                     if (InputPassword.equals(user.password)){
-                        //密码正确跳转至下一界面
                         Intent intent = new Intent(MainActivity.this, ListViewActivity.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
                     }else {
-                        //密码不正确则抛出异常
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

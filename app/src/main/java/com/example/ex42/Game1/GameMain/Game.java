@@ -1,5 +1,7 @@
 package com.example.ex42.Game1.GameMain;
 
+import static com.example.ex42.util.TimeUtil.parseSimpleToCharge;
+
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -18,22 +20,32 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.ex42.Batter.BaseHandlerCallBack;
 import com.example.ex42.Batter.PowerConsumptionRankingsBatteryView;
 import com.example.ex42.R;
 import com.example.ex42.Service.MusicService;
+import com.example.ex42.database.ShoppingDBHelper;
+import com.example.ex42.database.enity.RankInfo;
+import com.example.ex42.database.enity.User;
 import com.example.ex42.util.HideStateBar;
+import com.example.ex42.util.TimeUtil;
+import com.example.ex42.util.ToastUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 class NumItem{
@@ -58,7 +70,11 @@ class NumItem{
 }
 
 public class Game extends AppCompatActivity implements BaseHandlerCallBack{
-
+    private DrawerLayout dl_layout; // 声明一个抽屉布局对象
+    private ListView lv_drawer_right; // 声明右侧菜单的列表视图对象
+    private List<RankInfo> mRankInfos;
+    private ShoppingDBHelper mDBHelper;
+    private User mUser;
     private boolean start = false;
     private static String TAG = "Game";
     private String timeStr;
@@ -75,6 +91,7 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
     private long pauseOffset = 0;
     private boolean running = false;
     private long baseTime = 0;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private PowerConsumptionRankingsBatteryView mPowerConsumptionRankingsBatteryView;
     private int power;
@@ -84,7 +101,11 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private MusicService musicService;
     private boolean isBound = false;
-
+    private void initDBHelper() {
+        mDBHelper = ShoppingDBHelper.getInstance(getApplicationContext());
+        mDBHelper.openWriteLink();
+        mDBHelper.openReadLink();
+    }
     private ServiceConnection MusicServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -135,6 +156,36 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
         h1.hideStatusBar(this);
         setContentView(R.layout.activity_game);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        initDBHelper();
+        mUser = (User) getIntent().getSerializableExtra("user");
+        mRankInfos = mDBHelper.queryAllRankInfo();
+        for(RankInfo rankInfo:mRankInfos){
+            Log.d("RankAllInfo", rankInfo.toString());
+        }
+
+        // 定义一个 Comparator 对象，用于按照 OverTime 属性从小到大排序
+        Comparator<RankInfo> comparator = new Comparator<RankInfo>() {
+            @Override
+            public int compare(RankInfo o1, RankInfo o2) {
+                long charge1 = parseSimpleToCharge(o1.getOverTime());
+                long charge2 = parseSimpleToCharge(o2.getOverTime());
+                return Long.compare(charge1, charge2);
+            }
+        };
+
+        // 对 mRankInfos 列表进行排序
+        Collections.sort(mRankInfos, comparator);
+        for(RankInfo rankInfo:mRankInfos){
+            Log.d("RankAllInfo", rankInfo.toString());
+        }
+
+        // 从布局文件中获取名叫dl_layout的抽屉布局
+        dl_layout = findViewById(R.id.dl_layout);
+        // 给抽屉布局设置侧滑监听器
+        dl_layout.addDrawerListener(new SlidingListener());
+        initListDrawer(); // 初始化侧滑的菜单列表
+
+
         mHandler = new NoLeakHandler(this);
         mPowerConsumptionRankingsBatteryView = (PowerConsumptionRankingsBatteryView) findViewById(R.id.mPowerConsumptionRankingsBatteryView);
 
@@ -224,15 +275,6 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
 //                boolean isWin = true;
                 if(isWin){
                     mPauseButton.performClick();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
-                    builder.setMessage("恭喜，你通关了，成绩以记录排行榜，即将关闭此页面")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Game.this.finish();
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
 
 //                    unbindService(serviceConnection);
 //                    stopService(new Intent(Game.this, Clock.class));
@@ -241,11 +283,30 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
 //                    Game.this.finish();
                     Chronometer chronometer = findViewById(R.id.chronometer);
                     long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-                    int hours = (int) (elapsedMillis / 3600000);
-                    int minutes = (int) (elapsedMillis - hours * 3600000) / 60000;
-                    int seconds = (int) (elapsedMillis - hours * 3600000 - minutes * 60000) / 1000;
-                    String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                    String time = TimeUtil.chargeToString(elapsedMillis);
                     Log.d(TAG, time);
+                    RankInfo rankInfo = new RankInfo();
+                    rankInfo.account = mUser.account;
+                    rankInfo.OverTime = time;
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDBHelper.insertRankInfo(rankInfo);
+                        }
+                    }).start();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
+                    builder.setMessage("恭喜，你通关了，成绩已记录排行榜，即将关闭此页面")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Game.this.finish();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+                    Log.d("Rank_InFo", rankInfo.toString());
                 }
                 else Log.d("Game", "请继续解开谜题！");
             }
@@ -256,6 +317,45 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
 //        IntentFilter filter = new IntentFilter("com.example.ex42");
 //        registerReceiver(mTimerReceiver, filter);
 //        initPause();
+    }
+
+    private void initListDrawer() {
+        // 下面初始化右侧菜单的列表视图
+        lv_drawer_right = findViewById(R.id.lv_drawer_right);
+        RankAdapter adapter = new RankAdapter(this, mRankInfos);
+
+
+        lv_drawer_right.setAdapter(adapter);
+        lv_drawer_right.setOnItemClickListener(new RightListListener());
+
+    }
+
+    // 定义一个右侧菜单列表的点击监听器
+    private class RightListListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            dl_layout.closeDrawers(); // 关闭所有抽屉
+        }
+    }
+
+    // 定义一个抽屉布局的侧滑监听器
+    private class SlidingListener implements DrawerLayout.DrawerListener {
+        // 在拉出抽屉的过程中触发
+        public void onDrawerSlide(View drawerView, float slideOffset) {}
+
+        // 在侧滑抽屉打开后触发
+        public void onDrawerOpened(View drawerView) {
+
+        }
+
+        // 在侧滑抽屉关闭后触发
+        public void onDrawerClosed(View drawerView) {
+
+        }
+
+        // 在侧滑状态变更时触发
+        public void onDrawerStateChanged(int paramInt) {}
     }
 
     private void initChoronometer() {
