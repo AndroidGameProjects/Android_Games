@@ -20,14 +20,21 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/et_user_id"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="110"
-        android:textSize="30dp"
-        android:gravity="center"
-        android:textColor="#FF9800"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/et_user_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="110"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:textColor="#FF9800"/>
+
+    </LinearLayout>
+
 
 
 
@@ -59,5 +66,27 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:listSelector="@color/transparent"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <Button
+            android:id="@+id/btn_Internet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="近期资讯"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/rounded_button"/>
+
+    </RelativeLayout>
+
+
+
 
 </LinearLayout>

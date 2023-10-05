@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.ex42.Game1.Game1_Enter;
 import com.example.ex42.Game2.Game2_Enter;
+import com.example.ex42.InternetGameNews.Maintivitytest;
 import com.example.ex42.R;
 import com.example.ex42.database.enity.Game;
 import com.example.ex42.database.enity.User;
@@ -39,6 +41,7 @@ public class ListViewActivity extends AppCompatActivity implements AdapterView.O
     private TextView et_user_id;
     private ArrayAdapter mAdapterSear;
     private ListView listView2;
+    private Button btn_Internet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +128,13 @@ public class ListViewActivity extends AppCompatActivity implements AdapterView.O
                 searchView.setQuery(string.toString(),true);
             }
         });
+        btn_Internet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListViewActivity.this, Maintivitytest.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -135,6 +145,7 @@ public class ListViewActivity extends AppCompatActivity implements AdapterView.O
     private void initView() {
         lv_game = findViewById(R.id.lv_game);
         et_user_id = findViewById(R.id.et_user_id);
+        btn_Internet = findViewById(R.id.btn_Internet);
     }
 
     @Override

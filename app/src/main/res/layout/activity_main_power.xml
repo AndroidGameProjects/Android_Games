@@ -8,7 +8,7 @@
     android:id="@+id/constraintLayout"
     tools:context=".MainActivity">
 
-    <com.example.ex42.Batter.PowerConsumptionRankingsBatteryView
+    <com.example.ex42.Battery.PowerConsumptionRankingsBatteryView
         android:id="@+id/mPowerConsumptionRankingsBatteryView"
         android:layout_width="@dimen/power_consumption_rankings_dimen_main_battery_view_width"
         android:layout_height="@dimen/power_consumption_rankings_dimen_main_battery_view_height"

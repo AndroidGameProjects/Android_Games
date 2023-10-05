@@ -22,9 +22,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.ex42.Batter.BaseHandlerCallBack;
-import com.example.ex42.Batter.PowerConsumptionRankingsBatteryView;
-import com.example.ex42.Batter.Test;
+import com.example.ex42.Battery.BaseHandlerCallBack;
+import com.example.ex42.Battery.PowerConsumptionRankingsBatteryView;
 import com.example.ex42.Game2.GameMain.control.GameControl;
 import com.example.ex42.R;
 import com.example.ex42.Service.MusicService;

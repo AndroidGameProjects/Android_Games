@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Batter.Test">
+    tools:context=".Battery.Test">
 
-    <com.example.ex42.Batter.MyBatterView
+    <com.example.ex42.Battery.MyBatterView
         android:id="@+id/MyBatterView"
         android:layout_width="70dp"
         android:layout_height="20dp"

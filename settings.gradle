@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ex42"
 include ':app'
+include ':bottomnavigationview'

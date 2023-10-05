@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@mipmap/xxww">
 
-        <com.example.ex42.Batter.PowerConsumptionRankingsBatteryView
+        <com.example.ex42.Battery.PowerConsumptionRankingsBatteryView
             android:id="@+id/mPowerConsumptionRankingsBatteryView"
             android:layout_width="21dp"
             android:layout_height="33dp"

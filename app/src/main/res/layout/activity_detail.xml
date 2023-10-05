@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/btn_back"/>
+    
+    <ImageView
+        android:id="@+id/iv_image"
+        android:layout_marginTop="38dp"
+        android:layout_width="match_parent"
+        android:layout_height="195dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="标题"
+        android:textSize="30dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/tv_publish_time"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:text="2019-07-11"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/secondary_text_dark"
+        android:layout_alignBaseline="@id/tv_subtitle"
+        android:layout_toEndOf="@id/tv_subtitle"
+        android:layout_alignBottom="@id/iv_image"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="正文"
+        android:textSize="22sp"
+        />
+
+
+
+
+
+
+</LinearLayout>

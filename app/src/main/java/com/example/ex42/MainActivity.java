@@ -2,16 +2,12 @@ package com.example.ex42;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -19,9 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.example.ex42.Batter.BaseBatteryActivity;
 import com.example.ex42.OverWrite.ListViewActivity;
-import com.example.ex42.Pay.demo.Game.GameMainActivity;
 import com.example.ex42.database.ShoppingDBHelper;
 import com.example.ex42.database.enity.User;
 import com.example.ex42.util.HideStateBar;

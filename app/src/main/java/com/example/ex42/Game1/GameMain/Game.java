@@ -18,10 +18,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.GridView;
@@ -32,8 +30,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.ex42.Batter.BaseHandlerCallBack;
-import com.example.ex42.Batter.PowerConsumptionRankingsBatteryView;
+import com.example.ex42.Battery.BaseHandlerCallBack;
+import com.example.ex42.Battery.PowerConsumptionRankingsBatteryView;
 import com.example.ex42.R;
 import com.example.ex42.Service.MusicService;
 import com.example.ex42.database.ShoppingDBHelper;
@@ -41,7 +39,6 @@ import com.example.ex42.database.enity.RankInfo;
 import com.example.ex42.database.enity.User;
 import com.example.ex42.util.HideStateBar;
 import com.example.ex42.util.TimeUtil;
-import com.example.ex42.util.ToastUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -328,6 +325,7 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
 
         lv_drawer_right.setAdapter(adapter);
         lv_drawer_right.setOnItemClickListener(new RightListListener());
+
     }
 
     // 定义一个右侧菜单列表的点击监听器
@@ -360,7 +358,7 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
 
     private void initChoronometer() {
         chronometer = findViewById(R.id.chronometer);
-        chronometer.setFormat("计时：%s");
+        chronometer.setFormat("%s");
 
         mStartButton = findViewById(R.id.start_button);
         mStartButton.setOnClickListener(new View.OnClickListener() {
@@ -664,16 +662,13 @@ public class Game extends AppCompatActivity implements BaseHandlerCallBack{
     public void JgRunning(){
         if (running == true){
             tv_pause.setText("游戏中");
-            tv_pause.setGravity(Gravity.CENTER);
         } else if (running == false) {
             tv_pause.setText("暂停中");
-            tv_pause.setGravity(Gravity.CENTER);
         }
     }
 
     public void SetTimeView(Intent intent){
-//        TextView textView = findViewById(R.id.Game_Time);
-//        textView.setText(String.valueOf(intent.getIntExtra("time", 0)));
+
     }
 
     @Override

@@ -19,7 +19,7 @@
             android:background="#00000000"/>
 
 
-        <com.example.ex42.Batter.PowerConsumptionRankingsBatteryView
+        <com.example.ex42.Battery.PowerConsumptionRankingsBatteryView
             android:id="@+id/mPowerConsumptionRankingsBatteryView"
             android:layout_width="21dp"
             android:layout_height="33dp"
@@ -36,15 +36,15 @@
         android:layout_marginTop="120dp"/>
 
 
-<!--    <TextView-->
-<!--        android:id="@+id/Game_Time"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:text="00:00:00"-->
-<!--        android:textSize="30dp"-->
-<!--        android:textColor="@color/red"/>-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/Game_Time"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="20dp"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:text="00:00:00"-->
+    <!--        android:textSize="30dp"-->
+    <!--        android:textColor="@color/red"/>-->
 
     <RelativeLayout
         android:layout_width="400dp"
