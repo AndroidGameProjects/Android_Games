@@ -28,7 +28,7 @@ public class Clock extends Service {
     private void SetTime(int time){
         Intent intent = new Intent();
         intent.putExtra("time", time);
-        Game.instance.SetTimeView(intent);
+//        Game.instance.SetTimeView(intent);
     }
 
     @Override

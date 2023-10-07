@@ -3,6 +3,7 @@ package com.example.ex42;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,14 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.ex42.Game1.GameMain.Game;
 import com.example.ex42.database.ShoppingDBHelper;
 import com.example.ex42.database.enity.User;
 import com.example.ex42.util.GetString;
 import com.example.ex42.util.HideStateBar;
 import com.example.ex42.util.ToastUtil;
+import com.example.ex42.util.TreadData;
+import com.example.ex42.util.UniversalThread;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import android.os.Handler;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -65,7 +71,8 @@ public class RegisterActivity extends AppCompatActivity {
                             User user = mDBHelper.queryByAccount(et_Account.getText().toString());
                             if (user == null){
                                 RegisterSuccess();
-                            }else {
+                            }
+                            else {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -76,7 +83,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                         }
                     }).start();
-                }else{
+                }
+                else{
                     ToastUtil.show(RegisterActivity.this,"验证码错误");
                 }
             }
@@ -119,6 +127,19 @@ public class RegisterActivity extends AppCompatActivity {
                 ToastUtil.show(RegisterActivity.this,"注册成功");
             }
         });
+
+        //延迟返回登录界面
+        new UniversalThread(new TreadData() {
+            @Override
+            public void onExecute() {
+                //延迟返回登录界面，并向对应Activity发送信息
+                Intent userData = new Intent();
+                userData.putExtra("userName", et_Account.getText().toString());
+                userData.putExtra("userPassword", et_Password.getText().toString());
+                setResult(RESULT_OK,userData);
+                finish();
+            }
+        }, 1000).StartThread();
     }
 
     private void initView() {
