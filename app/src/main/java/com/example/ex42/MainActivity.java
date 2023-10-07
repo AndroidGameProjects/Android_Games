@@ -1,7 +1,12 @@
 package com.example.ex42;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -30,6 +35,7 @@ public class MainActivity extends AppCompatActivity  {
     private TextView tv_forgetPassword;
     private TextView tv_NewUserRegister;
     private ShoppingDBHelper mDBHelper;
+    private ActivityResultLauncher launcher;
     private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,26 @@ public class MainActivity extends AppCompatActivity  {
         initView();
         initLisnter();
 
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            //监听其他Activity结束，如果结束信息为RESULT_OK,则执行如下函数
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == Activity.RESULT_OK){
+                    String userName = result.getData().getStringExtra("userName");
+                    String userPassword = result.getData().getStringExtra("userPassword");
+
+                    //判断是否已经成功读取数据
+                    if(!userName.equals("") && !userPassword.equals("")){
+                        et_Main_account.setText(userName);
+                        et_password.setText(userPassword);
+                        Log.d("MainActivity", "修改参数成功！");
+                    }
+                    else{
+                        Log.d("MainActivity", "修改参数失败！");
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -74,8 +100,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
-                startActivity(intent);
-//                finish();
+                launcher.launch(intent);
             }
         });
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -148,5 +173,4 @@ public class MainActivity extends AppCompatActivity  {
         super.onDestroy();
         mDBHelper.closeLink();
     }
-
 }
